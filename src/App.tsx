@@ -1,4 +1,4 @@
-import { FormEvent, FormEventHandler, useState } from 'react';
+import { FormEvent, useState } from 'react';
 import insta from './assets/2227.png';
 import {ReactComponent as Download} from './assets/download.svg'
 
