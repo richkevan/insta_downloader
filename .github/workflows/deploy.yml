@@ -1,0 +1,55 @@
+name: Build and Deploy to Github pages
+
+on:
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+
+      - name: Install dependencies
+        uses: bahmutov/npm-install@v1
+
+      - name: Build project
+        run: npm run build
+        # env:
+        #   VITE_APIKEY: '${{ secrets.VITE_APIKEY }}'
+        #   VITE_AUTHDOMAIN: '${{ secrets.VITE_AUTHDOMAIN }}'
+        #   VITE_PROJECTID: '${{ secrets.VITE_PROJECTID }}'
+        #   VITE_STORAGEBUCKET: '${{ secrets.VITE_STORAGEBUCKET }}'
+        #   VITE_MESSAGINGSENDERID: '${{ secrets.VITE_MESSAGINGSENDERID }}'
+        #   VITE_APPID: '${{ secrets.VITE_APPID }}'
+        #   VITE_MEASUREMENTID: '${{ secrets.VITE_MEASUREMENTID }}'
+
+      - name: Upload production-ready build files
+        uses: actions/upload-artifact@v3
+        with:
+          name: production-files
+          path: ./dist
+
+  deploy:
+    name: Deploy
+    needs: build_and_deploy
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: production-files
+          path: ./dist
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
