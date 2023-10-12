@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { FormEvent, FormEventHandler, useState } from 'react';
 import insta from './assets/2227.png';
 import {ReactComponent as Download} from './assets/download.svg'
 
@@ -6,9 +6,9 @@ function App() {
   const [src, setSrc] = useState("");
   const [media] = useState("img");
 
-  const fetchImage = async (e: { preventDefault: () => void; target: HTMLFormElement | undefined; }) => {
+  const fetchImage = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const entry = new FormData(e.target);
+    const entry = new FormData(e.target as HTMLFormElement);
     const data = Object.fromEntries(entry);
     const params = new URLSearchParams(data.url.toString());
     if (media === "img") {
