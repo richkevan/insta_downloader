@@ -8,7 +8,7 @@ const src = resolve(__dirname, './src')
 // https://vitejs.dev/config/
 export default defineConfig({
   root: src,
-  base: './insta_downloader',
+  base: '/insta_downloader/',
   publicDir: resolve(__dirname, './public'),
 
   plugins: [react(), svgr()],
